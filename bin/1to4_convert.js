@@ -2,12 +2,19 @@ var fs = require('fs');
 var parse = require('csv-parse');
 var s_meta = require('./station_meta');
 
-var f1to4 = fs.readFileSync('source/2014_1TO4.csv', 'utf8');
+//var sInfo = fs.readFileSync('C:\\Users\\win10\\Downloads\\subway_data\\station_info.json', 'utf8');
+var sInfo = fs.readFileSync('/home/jongsang/local/station_info.json', 'utf8');
+var sLocation = JSON.parse(sInfo).DATA;
+//console.log(sLocation.DATA.length);
+
+
+//var f1to4 = fs.readFileSync('C:\\Users\\win10\\Downloads\\subway_data\\2014_1TO4.csv', 'utf8');
+var f1to4 = fs.readFileSync('/home/jongsang/local/2014_1TO4.csv', 'utf8');
 parse(f1to4, {comment:"#"}, function(csv_err, csv_data){
   if (csv_err) {
     return console.log(csv_err);
   }
-  //console.log(csv_data.length);
+//  console.log(csv_data.length);
   // console.log("%j",csv_data[0]);
   // console.log("%j",csv_data[1]);
   // console.log("%j",csv_data[2]);
@@ -29,20 +36,21 @@ parse(f1to4, {comment:"#"}, function(csv_err, csv_data){
       var station_name = "";
       if(!s_meta[lStationName]){
         station_name = sDiffNames[lStationName][0];
-        console.log("******");
+//        console.log("******");
         //sRiders[j].SUB_STA_NM = sDiffNames[lStationName][0];
       } else {
         station_name = lStationName;
       }
       */
-      station_name = lStationName;
+      var station_name = lStationName;
       
       var ldateTemp = dataIn[0].split('-');
-      // console.log(Number(ldateTemp[0]));
-      // console.log(Number(ldateTemp[1]));
-      // console.log(Number(ldateTemp[2]));
+//       console.log(Number(ldateTemp[0]));
+//       console.log(Number(ldateTemp[1]));
+       console.log(Number(ldateTemp[2]));
       for(var h=0; h < 24; h++){
-        var ldate = new Date(ldateTemp[0],Number(ldateTemp[1])-1,ldateTemp[2],h);
+//        var ldate = new Date(ldateTemp[0],Number(ldateTemp[1])-1,ldateTemp[2],h);
+    	  var ldate = new Date(ldateTemp[0],Number(ldateTemp[1]),ldateTemp[2],h);
         // console.log("%j"+ldate);
         // - 로 되어 있는 값들 0으로 변경.
         var people_in = dataIn[4+h];
@@ -64,6 +72,7 @@ parse(f1to4, {comment:"#"}, function(csv_err, csv_data){
           "5호선" : "Line 5", "6호선" : "Line 6", "7호선" : "Line 7", "8호선" : "Line 8"
         }
         //console.log(station_name);
+        if(s_meta[station_name] !== undefined){
         var s_logs = {
           "time_slot" : ldate,
           "line_num" : dataIn[1],
@@ -81,6 +90,7 @@ parse(f1to4, {comment:"#"}, function(csv_err, csv_data){
           "people_in" : people_in,
           "people_out" : people_out
         }
+        }
 
         //console.log("%j",s_logs);
         //console.log(ldate.toISOString().slice(0,10).replace(/-/g,""));
@@ -93,5 +103,6 @@ parse(f1to4, {comment:"#"}, function(csv_err, csv_data){
     }
 
   }
+
 
 });
