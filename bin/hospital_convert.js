@@ -1,7 +1,8 @@
 var fs = require('fs');
 var parse = require('csv-parse');
 
-var f1to4 = fs.readFileSync('C:\\Users\\win10\\Downloads\\subway_data\\DDMC_HP.csv', 'utf8');
+//var f1to4 = fs.readFileSync('C:\\Users\\win10\\Downloads\\subway_data\\DDMC_HP.csv', 'utf8');
+var f1to4 = fs.readFileSync('/home/jongsang/local/DDMC_HP.csv', 'utf8');
 
 parse(f1to4, {comment:"#"}, function(csv_err, csv_data){
   if (csv_err) {
